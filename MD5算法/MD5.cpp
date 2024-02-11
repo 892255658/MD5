@@ -44,7 +44,7 @@ private:
 		MD5[13] = 0x54;
 		MD5[14] = 0x32;
 		MD5[15] = 0x10;
-		long fDataBytes = 0;
+		long long fDataBytes = 0;
 	}
 	bool getFileLength(char* fileName)
 	{
@@ -62,7 +62,7 @@ private:
 	{
 		fin.seekg(0, ios::beg);
 		int nRes = fin.is_open();
-		int groupNum = fDataBytes / 64;
+		long long groupNum = fDataBytes / 64;
 		int	lastGroup = fDataBytes % 64;
 		for (int i = 0; i < groupNum; i++)
 		{
@@ -73,7 +73,7 @@ private:
 		if (lastGroup > 0 && lastGroup <= 56)
 		{
 			char str[64] = { 0 };
-			int count = fin.read(str, 64).gcount();
+			long long count = fin.read(str, 64).gcount();
 			*(unsigned long long*)(str + 56) = fDataBytes * 8;
 			if (count < 56)
 			{
@@ -93,7 +93,7 @@ private:
 		else if (lastGroup > 56)
 		{
 			char preStr[64] = { 0 };
-			int count = fin.read(preStr, 64).gcount();
+			long long count = fin.read(preStr, 64).gcount();
 			preStr[count] = -128;
 			GetMD5(preStr);
 			char lastStr[64] = { 0 };
@@ -192,9 +192,9 @@ private:
 		return md1;
 	}
 private:
-	long fDataBytes;
+	long long fDataBytes=0;
 	unsigned int CS16[16] = { 7,12,17,22,5,9,14,20,4,11,16,23,6,10,15,21 };
-	unsigned char MD5[16];
+	unsigned char MD5[16] = { 0 };
 	unsigned int* pMD5 = (unsigned int*)MD5;
 	unsigned int CS64[64] = { 3614090360,3905402710,606105819,3250441966,4118548399,1200080426,2821735955,4249261313,1770035416,
 		2336552879,4294925233,2304563134,1804603682,4254626195,2792965006,1236535329,4129170786,3225465664,643717713,3921069994,
